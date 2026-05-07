@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cara Belanja - CyberCrate</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js"></script>
+    <script>
+        if (!sessionStorage.getItem("user")) {
+            window.location.replace("login.html");
+        }
+    </script>
+</head>
+
+<body class="auth-page">
+
+    <nav>
+        <div class="logo">
+            <img src="images/logo.png">
+            <h2>CYBER CREATE</h2>
+        </div>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="index.html#informasi">Informasi</a>
+        </div>
+    </nav>
+
+    <main class="about-wrapper">
+        <h1 class="about-title">CARA BELANJA</h1>
+
+        <div class="about-content">
+            <div class="about-text">
+                <div class="policy-item">
+                    <h3>1. Pilih Kategori</h3>
+                    <p>Tentukan komponen yang Anda butuhkan melalui grid kategori yang tersedia di halaman utama.</p>
+                </div>
+
+                <div class="policy-item">
+                    <h3>2. Masukkan Keranjang</h3>
+                    <p>Klik tombol tambah ke keranjang pada produk yang Anda inginkan dan periksa kembali jumlah pesanan
+                        Anda.</p>
+                </div>
+
+                <div class="policy-item">
+                    <h3>3. Checkout & Bayar</h3>
+                    <p>Lakukan checkout, pilih metode pengiriman, dan selesaikan pembayaran untuk memproses rakitan PC
+                        Anda.</p>
+                </div>
+            </div>
+
+            <div class="image-container-square">
+                <img src="images/cart.png" alt="Shopping Guide">
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel | CyberCrate</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400&display=swap"
+    rel="stylesheet">
+</head>
+
+<nav class="cyber-navbar">
+  <!-- Tombol kiri (kosong/placeholder) untuk menyeimbangkan judul -->
+  <div class="nav-side-box"></div>
+
+  <h1 class="nav-title">ADMIN CYBERCRATE</h1>
+
+  <!-- Tombol kanan -->
+  <div class="nav-side-box">
+    <a href="index.html" class="home-link">HOME</a>
+  </div>
+</nav>
+
+<main class="admin-content">
+  <div class="table-container">
+    <table class="cyber-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>PRODUCT NAME</th>
+          <th>CATEGORY</th>
+          <th>PRICE</th>
+          <th>STOCK</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody id="admin-list">
+        <!-- Data Rendered by JS -->
+      </tbody>
+    </table>
+  </div>
+</main>
+<!-- Tambahkan ini di bagian head admin.html -->
+<script src="js/data.js"></script>
+
+<script>
+  // Ambil data dari localStorage, jika kosong baru ambil dari data.js
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+
+  // Inisialisasi data jika pertama kali buka (asumsi variabel di data.js adalah 'products')
+  if (products.length === 0 && typeof products !== 'undefined') {
+    localStorage.setItem("products", JSON.stringify(products));
+  }
+
+  function render() {
+    const list = document.getElementById("admin-list");
+    if (!list) return;
+    list.innerHTML = "";
+
+    products.forEach((p, i) => {
+      list.innerHTML += `
+              <tr>
+                  <td>${i + 1}</td>
+                  <td class="neon-cyan">${p.name}</td>
+                  <td>${p.category}</td>
+                  <td>Rp ${p.price.toLocaleString()}</td>
+                  <td class="stock-cell">
+                      <button class="btn-stock" onclick="updateStock(${i}, -1)">-</button>
+                      <span class="stock-num">${p.stock || 0}</span>
+                      <button class="btn-stock" onclick="updateStock(${i}, 1)">+</button>
+                  </td>
+                  <td><button class="btn-purge" onclick="deleteProduct(${i})">DELETE</button></td>
+              </tr>`;
+    });
+  }
+
+  function updateStock(index, amount) {
+    products[index].stock = (parseInt(products[index].stock) || 0) + amount;
+    if (products[index].stock < 0) products[index].stock = 0;
+
+    // Simpan ke localStorage agar sinkron ke halaman produk
+    localStorage.setItem("products", JSON.stringify(products));
+    render();
+  }
+
+  function deleteProduct(index) {
+    if (confirm("Hapus produk ini?")) {
+      products.splice(index, 1);
+      localStorage.setItem("products", JSON.stringify(products));
+      render();
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", render);
+</script>
+</body>
+
+</html>

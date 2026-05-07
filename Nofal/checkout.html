@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout - CyberCrate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .checkout-container { padding: 50px 5%; color: white; max-width: 800px; margin: 0 auto; }
+    .checkout-box { background: rgba(0, 0, 0, 0.8); padding: 30px; border: 1px solid #0ff; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-family: 'Orbitron'; color: #0ff; }
+    .form-group input, .form-group textarea, .form-group select { 
+      width: 100%; padding: 12px; background: #111; border: 1px solid #0ff; color: white; border-radius: 4px;
+    }
+    .order-summary { margin-top: 30px; border-top: 1px solid #444; padding-top: 20px; }
+    .btn-pay { width: 100%; padding: 15px; background: #0ff; color: black; font-weight: bold; border: none; cursor: pointer; font-family: 'Orbitron'; margin-top: 20px; }
+    .btn-pay:hover { background: #fff; box-shadow: 0 0 20px #0ff; }
+  </style>
+</head>
+<body class="auth-page">
+
+  <div class="checkout-container">
+    <div class="checkout-box">
+      <h2 style="font-family: 'Orbitron'; color: #0ff; text-align: center;">DETAIL PEMBAYARAN</h2>
+      
+      <!-- FORM PENERIMA -->
+      <div class="form-group">
+        <label>Nama Penerima</label>
+        <input type="text" id="custName" placeholder="Masukkan nama lengkap">
+      </div>
+
+      <div class="form-group">
+        <label>Alamat Lengkap</label>
+        <textarea id="custAddress" rows="3" placeholder="Masukkan alamat pengiriman"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Metode Pembayaran</label>
+        <select id="payMethod">
+          <option value="">-- Pilih Pembayaran --</option>
+          <option value="Transfer Bank">Transfer Bank (BCA / Mandiri)</option>
+          <option value="E-Wallet">E-Wallet (Dana / OVO / GoPay)</option>
+          <option value="QRIS">QRIS</option>
+        </select>
+      </div>
+
+      <!-- RINGKASAN BELANJA -->
+      <div class="order-summary">
+        <h3 style="color: #0ff;">Ringkasan Pesanan</h3>
+        <div id="checkout-list"></div>
+        <hr style="border: 0.5px solid #333; margin: 15px 0;">
+        <h3 id="total-display">Total: Rp 0</h3>
+      </div>
+
+      <button onclick="prosesBayar()" class="btn-pay">KONFIRMASI PEMBAYARAN</button>
+      <p style="text-align: center; margin-top: 15px;">
+        <a href="index.html" style="color: #888; text-decoration: none;">Batal & Kembali</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function renderCheckout() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const products = JSON.parse(localStorage.getItem("products")) || [];
+      const list = document.getElementById("checkout-list");
+      let total = 0;
+
+      if (cart.length === 0) {
+        list.innerHTML = "<p>Keranjang kosong.</p>";
+        return;
+      }
+
+      list.innerHTML = "";
+      cart.forEach(item => {
+        // Cari data lengkap produk berdasarkan ID agar harga akurat[cite: 4, 7]
+        const p = products.find(x => x.id == item.id);
+        if (p) {
+          const subtotal = p.price * item.qty;
+          total += subtotal;
+          list.innerHTML += `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span>${p.name} (x${item.qty})</span>
+              <span>Rp ${subtotal.toLocaleString()}</span>
+            </div>
+          `;
+        }
+      });
+
+      document.getElementById("total-display").innerText = "Total: Rp " + total.toLocaleString();
+    }
+
+    function prosesBayar() {
+  const name = document.getElementById("custName").value;
+  const address = document.getElementById("custAddress").value;
+  const method = document.getElementById("payMethod").value;
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+
+  if (cart.length === 0) return alert("Keranjang kosong!");
+  if (!name || !address || !method) return alert("Mohon lengkapi Nama, Alamat, dan Metode Pembayaran!");
+
+  // LOGIKA POTONG STOK
+  cart.forEach(cartItem => {
+    let productIndex = products.findIndex(p => p.id == cartItem.id);
+    if (productIndex !== -1) {
+      products[productIndex].stock -= cartItem.qty; // Kurangi stok sesuai jumlah beli
+    }
+  });
+
+  // Simpan kembali data produk yang stoknya sudah berkurang
+  localStorage.setItem("products", JSON.stringify(products));
+  
+  alert(`Terima kasih ${name}!\nPembayaran via ${method} Berhasil.\nBarang akan dikirim ke: ${address}`);
+  
+  localStorage.removeItem("cart");
+  window.location.href = "index.html";
+}
+
+    renderCheckout();
+  </script>
+</body>
+</html>

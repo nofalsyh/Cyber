@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kebijakan Privasi - CyberCrate</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js"></script>
+    <script>
+        if (!sessionStorage.getItem("user")) {
+            window.location.replace("login.html");
+        }
+    </script>
+</head>
+
+<body class="auth-page">
+
+    <nav>
+        <div class="logo">
+            <img src="images/logo.png">
+            <h2>CYBER CREATE</h2>
+        </div>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="index.html#informasi">Informasi</a>
+        </div>
+    </nav>
+
+    <main class="about-wrapper">
+        <h1 class="about-title">KEBIJAKAN PRIVASI</h1>
+
+        <div class="about-content">
+            <div class="about-text">
+                <div class="policy-item">
+                    <h3>Data Pengguna</h3>
+                    <p>Informasi akun Anda disimpan secara permanen di browser (LocalStorage) dan sesi login akan
+                        dihapus saat tab ditutup (SessionStorage).</p>
+                </div>
+                <div class="policy-item">
+                    <h3>Keamanan</h3>
+                    <p>Kami menggunakan sistem proteksi halaman untuk memastikan hanya pengguna terdaftar yang dapat
+                        mengakses layanan CyberCrate.</p>
+                </div>
+            </div>
+
+            <div class="image-container-square">
+                <img src="images/privasi.jpg" alt="Privacy Policy">
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

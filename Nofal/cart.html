@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="css/style.css">
+
+<h2>Cart</h2>
+<div id="cart"></div>
+<h3 id="total"></h3>
+
+<script>
+    function render() {
+        let cartData = JSON.parse(localStorage.getItem("cart")) || []
+        let products = JSON.parse(localStorage.getItem("products"))
+        cart.innerHTML = ""
+        let total = 0
+
+        cartData.forEach(item => {
+            let p = products.find(x => x.id == item.id)
+            total += p.price * item.qty
+
+            cart.innerHTML += `
+<div class="card">
+${p.name}
+<br>
+<button onclick="min(${item.id})">-</button>
+${item.qty}
+<button onclick="plus(${item.id})">+</button>
+<button onclick="del(${item.id})">Hapus</button>
+</div>`
+        })
+        totalEl.innerText = "Total: " + total
+    }
+
+    function plus(id) {
+        let c = JSON.parse(localStorage.getItem("cart"))
+        c.find(i => i.id == id).qty++
+        localStorage.setItem("cart", JSON.stringify(c))
+        render()
+    }
+
+    function min(id) {
+        let c = JSON.parse(localStorage.getItem("cart"))
+        let i = c.find(x => x.id == id)
+        i.qty > 1 ? i.qty-- : c = c.filter(x => x.id != id)
+        localStorage.setItem("cart", JSON.stringify(c))
+        render()
+    }
+
+    function del(id) {
+        let c = JSON.parse(localStorage.getItem("cart"))
+        c = c.filter(x => x.id != id)
+        localStorage.setItem("cart", JSON.stringify(c))
+        render()
+    }
+
+    const cart = document.getElementById("cart")
+    const totalEl = document.getElementById("total")
+    render()
+</script>
+<button onclick="goCheckout()">Checkout</button>
+
+<script>
+    function goCheckout() {
+        window.location.href = "checkout.html";
+    }
+</script>

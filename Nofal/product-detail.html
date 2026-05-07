@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Detail Produk | CyberCrate</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js"></script>
+</head>
+<body>
+  <nav>
+    <div class="logo"><img src="images/logo.png"><h2>CYBER CREATE</h2></div>
+    <div class="menu"><a href="index.html">Home</a><a href="index.html#produk">Produk</a></div>
+    <div class="nav-right">
+      <div class="cart-icon" onclick="toggleCart()" style="cursor:pointer;">
+        <img src="images/cart.png"><span id="cart-count">0</span>
+      </div>
+    </div>
+  </nav>
+
+  <div id="detail" class="box" style="text-align:center; padding: 40px 20px;"></div>
+  <div class="detail-btn" id="action-area" style="text-align:center; margin-bottom: 50px;"></div>
+
+  <div class="cart-sidebar" id="cartSidebar">
+    <span class="cart-close" onclick="toggleCart()">✕</span>
+    <h2>Keranjang</h2><hr class="cyber-hr">
+    <div id="cartList"></div>
+    <h3 id="cartTotal">Total: Rp 0</h3>
+    <button class="btn-bayar-cyber" style="width: 100%;" onclick="openCheckout()">Checkout</button>
+  </div>
+
+  <div id="checkoutModal" class="modal">
+    <div class="modal-content-cyber">
+      <span class="close-cyber" onclick="closeCheckout()">&times;</span>
+      <h2 class="modal-title-cyber">Detail Pengiriman</h2>
+      <div id="checkout-items" class="checkout-list" style="margin-bottom: 20px; border: 1px solid #333; padding: 10px; border-radius: 5px; max-height: 150px; overflow-y: auto;"></div>
+      <div class="total-section" style="margin-bottom: 20px; text-align: right;">
+        <h3>Total Bayar: Rp <span id="checkout-total">0</span></h3>
+      </div>
+      <div class="form-shipping">
+        <input type="text" id="buyer-name" placeholder="Nama Lengkap" class="cyber-input">
+        <textarea id="buyer-address" placeholder="Alamat Lengkap Penerima" class="cyber-input"></textarea>
+        <select id="payment-method" class="cyber-input">
+          <option value="" disabled selected>Pilih Metode Pembayaran</option>
+          <option value="transfer">Transfer Bank</option>
+          <option value="e-wallet">E-Wallet (Dana/OVO)</option>
+          <option value="cod">Cash on Delivery</option>
+        </select>
+      </div>
+      <button class="btn-bayar-cyber" onclick="bayarSekarang()">Bayar Sekarang</button>
+    </div>
+  </div>
+
+  <script>
+    const id = parseInt(new URLSearchParams(location.search).get("id"));
+    let productsDB = JSON.parse(localStorage.getItem("products")) || [];
+    let product = productsDB.find(p => p.id === id);
+
+    function renderDetail() {
+        if (!product) return;
+        let specHTML = "";
+        if (product.category === "pc") {
+            specHTML = `<p><b>Spesifikasi PC:</b><br>Processor: ${product.cpu || "Intel Core"}<br>RAM: ${product.ram || "16GB"}<br>VGA: ${product.gpu || "NVIDIA RTX"}</p>`;
+        } else if (product.category === "motherboard") {
+            specHTML = `<p><b>Spesifikasi Mobo:</b><br>Socket: ${product.socket || "LGA"}<br>Chipset: ${product.chipset || "B550"}</p>`;
+        }
+        const isOutOfStock = product.stock <= 0;
+        document.getElementById("detail").innerHTML = `
+            <img src="images/${product.img}" style="width:250px; margin-bottom:15px; border-radius: 10px;" onerror="this.src='images/default.png'">
+            <h2>${product.name}</h2>
+            <p style="font-size: 1.2rem;">Rp ${parseInt(product.price).toLocaleString()}</p>
+            <p id="stock-info" style="color: ${isOutOfStock ? '#ff4d4d' : '#00ffff'}; font-weight: bold;">
+                ${isOutOfStock ? 'STOK HABIS' : 'Tersedia: ' + product.stock}
+            </p>${specHTML}`;
+        const actionArea = document.getElementById("action-area");
+        actionArea.innerHTML = isOutOfStock ? 
+            `<button disabled style="opacity: 0.5; cursor: not-allowed; padding:10px 20px;">STOK HABIS</button>` : 
+            `<button onclick="addToCart()" style="padding:10px 20px; cursor:pointer;">Tambah ke Keranjang</button>`;
+    }
+
+    function addToCart() {
+        if (!product || product.stock <= 0) return alert("Stok habis!");
+        let currentProducts = JSON.parse(localStorage.getItem("products")) || [];
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let dbIdx = currentProducts.findIndex(p => p.id === product.id);
+        if (dbIdx !== -1) {
+            currentProducts[dbIdx].stock -= 1;
+            product.stock = currentProducts[dbIdx].stock; 
+        }
+        let exist = cart.find(i => i.id === product.id);
+        if (exist) { exist.qty++; } else { cart.push({ id: product.id, qty: 1 }); }
+        localStorage.setItem("products", JSON.stringify(currentProducts));
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+        renderDetail();
+        renderCart();
+        alert("Berhasil ditambahkan!");
+    }
+
+    // Ganti fungsi renderCart di product-detail.html
+// Ganti fungsi renderCart di product-detail.html
+function renderCart() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let db = JSON.parse(localStorage.getItem("products")) || [];
+
+    let list = document.getElementById("cartList");
+    let totalEl = document.getElementById("cartTotal");
+
+    list.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        let p = db.find(x => x.id == item.id);
+
+        if (p) {
+            let sub = p.price * item.qty;
+            total += sub;
+
+            list.innerHTML += `
+<div class="cart-item">
+
+  <p>${p.name}</p>
+
+  <p>Rp ${sub.toLocaleString()}</p>
+
+  <button onclick="updateQty(${index}, -1)">-</button>
+
+  <span>${item.qty}</span>
+
+  <button onclick="updateQty(${index}, 1)">+</button>
+
+  <button onclick="removeItem(${index})">🗑</button>
+
+</div>
+`;
+        }
+    });
+
+    totalEl.innerText =
+        "Total: Rp " + total.toLocaleString();
+}
+
+    function updateQty(index, change) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let db = JSON.parse(localStorage.getItem("products")) || [];
+        let item = cart[index];
+        let pIdx = db.findIndex(p => p.id == item.id);
+        if (pIdx !== -1) {
+            if (change === 1) {
+                if (db[pIdx].stock <= 0) return alert("Stok habis!");
+                db[pIdx].stock -= 1; item.qty += 1;
+            } else {
+                if (item.qty > 1) { db[pIdx].stock += 1; item.qty -= 1; } 
+                else { return removeItem(index); }
+            }
+        }
+        localStorage.setItem("products", JSON.stringify(db));
+        localStorage.setItem("cart", JSON.stringify(cart));
+        product = db.find(p => p.id === id);
+        renderCart(); updateCartCount(); renderDetail();
+    }
+
+    function removeItem(index) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let db = JSON.parse(localStorage.getItem("products")) || [];
+        let item = cart[index];
+        let pIdx = db.findIndex(p => p.id == item.id);
+        if (pIdx !== -1) { db[pIdx].stock += item.qty; }
+        cart.splice(index, 1);
+        localStorage.setItem("products", JSON.stringify(db));
+        localStorage.setItem("cart", JSON.stringify(cart));
+        product = db.find(p => p.id === id);
+        renderCart(); updateCartCount(); renderDetail();
+    }
+
+    function openCheckout() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        if (cart.length === 0) return alert("Keranjang kosong!");
+        document.getElementById("checkoutModal").style.display = "block";
+        let db = JSON.parse(localStorage.getItem("products")) || [];
+        let checkoutList = document.getElementById("checkout-items");
+        let totalLabel = document.getElementById("checkout-total");
+        checkoutList.innerHTML = ""; let total = 0;
+        cart.forEach(item => {
+            let p = db.find(x => x.id == item.id);
+            if (p) {
+                let sub = p.price * item.qty; total += sub;
+                checkoutList.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${p.name} (x${item.qty})</span><span>Rp ${sub.toLocaleString()}</span></div>`;
+            }
+        });
+        totalLabel.innerText = total.toLocaleString();
+        const sidebar = document.getElementById("cartSidebar");
+        if(sidebar.classList.contains("active")) toggleCart();
+    }
+
+    function bayarSekarang() {
+        if (!document.getElementById("buyer-name").value || !document.getElementById("buyer-address").value) return alert("Lengkapi data!");
+        localStorage.removeItem("cart");
+        alert("Pembayaran Berhasil!");
+        location.href = "index.html";
+    }
+
+    function updateCartCount() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        document.getElementById("cart-count").innerText = cart.reduce((t, i) => t + i.qty, 0);
+    }
+    function toggleCart() { document.getElementById("cartSidebar").classList.toggle("active"); if (document.getElementById("cartSidebar").classList.contains("active")) renderCart(); }
+    function closeCheckout() { document.getElementById("checkoutModal").style.display = "none"; }
+    renderDetail(); updateCartCount();
+  </script>
+</body>
+</html>

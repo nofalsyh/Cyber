@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <script>
+
+    if (!sessionStorage.getItem("user")) {
+      window.location.replace("login.html");
+    }
+  </script>
+
+  <meta charset="UTF-8">
+  <title>CyberCrate</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js"></script>
+
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">
+      <img src="images/logo.png">
+      <h2>CYBER CREATE</h2>
+    </div>
+
+    <div class="menu">
+      <a href="#">Home</a>
+      <a href="#produk">Produk</a>
+      <a href="#informasi">Informasi</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="cart-icon" onclick="toggleCart()">
+        <img src="images/cart.png">
+        <span id="cart-count">0</span>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="overlay">
+      <h1 class="typing-glitch">CYBER CREATE</h1>
+      <p class="car-move">
+        Kami adalah store rakitan PC yang menyediakan komputer berkualitas untuk
+        kebutuhan gaming, editing, dan harian.
+      </p>
+    </div>
+
+    <button class="slide-btn left" onclick="prevSlide()">
+      <img src="images/kiri.png">
+    </button>
+
+    <div class="hero-slider" id="heroSlider">
+      <div class="slide"><img src="images/header.webp"></div>
+      <div class="slide"><img src="images/header 2.webp"></div>
+      <div class="slide"><img src="images/header 3.png"></div>
+    </div>
+
+    <button class="slide-btn right" onclick="nextSlide()">
+      <img src="images/kanan.png">
+    </button>
+  </section>
+
+  <!-- PRODUK -->
+  <section class="kategori" id="produk">
+    <h2 class="judul-produk">PRODUK</h2>
+
+    <div class="grid">
+
+      <div class="box" onclick="goCategory('pc')"><img src="images/pc.png">
+        <p>PC Build</p>
+      </div>
+      <div class="box" onclick="goCategory('monitor')"><img src="images/monitor.png">
+        <p>Monitor</p>
+      </div>
+      <div class="box" onclick="goCategory('casing')"><img src="images/casing.png">
+        <p>Casing</p>
+      </div>
+      <div class="box" onclick="goCategory('gpu')"><img src="images/gpu.png">
+        <p>GPU</p>
+      </div>
+      <div class="box" onclick="goCategory('motherboard')"><img src="images/motherboard.png">
+        <p>Motherboard</p>
+      </div>
+
+      <div class="box" onclick="goCategory('cooler')"><img src="images/cooler.png">
+        <p>Cooler</p>
+      </div>
+      <div class="box" onclick="goCategory('keyboard')"><img src="images/keyboard.png">
+        <p>Keyboard</p>
+      </div>
+      <div class="box" onclick="goCategory('cpu')"><img src="images/cpu.png">
+        <p>CPU</p>
+      </div>
+      <div class="box" onclick="goCategory('storage')"><img src="images/storage.png">
+        <p>HDD & SSD</p>
+      </div>
+      <div class="box" onclick="goCategory('psu')"><img src="images/psu.png">
+        <p>PSU</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="informasi">
+    <div class="footer-grid">
+
+      <div>
+        <h3>Cyber Crate</h3>
+        <p><a href="about.html">Tentang Kami</a></p>
+        <p><a href="privacy.html">Kebijakan Privasi</a></p>
+        <p><a href="terms.html">Syarat & Ketentuan</a></p>
+      </div>
+
+      <div>
+        <h4>Bantuan</h4>
+        <p><a href="payment.html">Cara Pembayaran</a></p>
+        <p><a href="guide.html">Cara Belanja</a></p>
+      </div>
+
+      <div>
+        <h4>Layanan</h4>
+        <p>Rakit PC</p>
+        <p>Upgrade Komponen</p>
+        <p>Konsultasi Gratis</p>
+      </div>
+
+      <div>
+        <h4>Kontak</h4>
+        <p>Email: cybercrate@email.com</p>
+        <p>WA: 0812-xxxx-xxxx</p>
+        <p>Lokasi: Indonesia</p>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 CyberCrate. All Rights Reserved.</p>
+    </div>
+
+  </footer>
+
+  <script>
+
+    /* LOGOUT */
+    function logout() {
+      sessionStorage.removeItem("user");
+      location.href = "login.html";
+    }
+
+    /* SCROLL HERO */
+    function scrollDown() {
+      window.scrollTo({
+        top: window.innerHeight,
+        behavior: "smooth"
+      });
+    }
+
+    /* KATEGORI */
+    function goCategory(cat) {
+      if (!cat) return;
+      localStorage.setItem("category", cat);
+      window.location.href = "products.html";
+    }
+
+    /* CART */
+    function goCart() {
+      window.location.href = "cart.html";
+    }
+
+    /* CART COUNT */
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let total = 0;
+
+      cart.forEach(item => total += item.qty);
+
+      const count = document.getElementById("cart-count");
+      const icon = document.querySelector(".cart-icon");
+
+      count.innerText = total;
+
+      if (total > 0) {
+        icon.classList.add("active");
+      } else {
+        icon.classList.remove("active");
+      }
+    }
+    updateCartCount();
+
+  </script>
+  <script>
+    function toggleCart() {
+      document.getElementById("cartSidebar").classList.toggle("active");
+      renderCart();
+    }
+
+    function renderCart() {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let products = JSON.parse(localStorage.getItem("products")) || [];
+
+      let list = document.getElementById("cartList");
+      let totalEl = document.getElementById("cartTotal");
+
+      list.innerHTML = "";
+      let total = 0;
+
+      cart.forEach(item => {
+        let p = products.find(x => x.id == item.id);
+        if (!p) return;
+
+        total += p.price * item.qty;
+
+        list.innerHTML += `
+        <div class="cart-item">
+          <p>${p.name}</p>
+          <p>Rp ${p.price}</p>
+  
+          <button onclick="min(${item.id})">-</button>
+          ${item.qty}
+          <button onclick="plus(${item.id})">+</button>
+          <button onclick="hapus(${item.id})">🗑</button>
+        </div>
+      `;
+      });
+
+      totalEl.innerText = "Total: Rp " + total;
+    }
+
+    function plus(id) {
+      let cart = JSON.parse(localStorage.getItem("cart"));
+      cart.find(i => i.id == id).qty++;
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function min(id) {
+      let cart = JSON.parse(localStorage.getItem("cart"));
+      let item = cart.find(i => i.id == id);
+
+      if (item.qty > 1) {
+        item.qty--;
+      } else {
+        cart = cart.filter(i => i.id != id);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function hapus(id) {
+      let cart = JSON.parse(localStorage.getItem("cart"));
+      cart = cart.filter(i => i.id != id);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function openCheckout() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const products = JSON.parse(localStorage.getItem("products")) || [];
+
+      const container = document.getElementById("checkout-items");
+      const totalEl = document.getElementById("checkout-total");
+
+      let total = 0;
+      let html = "";
+
+      if (cart.length === 0) {
+        html = "<p>Keranjang kosong</p>";
+      } else {
+        cart.forEach(item => {
+          const p = products.find(x => x.id == item.id);
+          if (!p) return;
+
+          total += p.price * item.qty;
+
+          html += `
+        <div class="item">
+          <p>${p.name}</p>
+          <small>Rp ${p.price} x ${item.qty}</small>
+        </div>
+      `;
+        });
+      }
+
+      container.innerHTML = html;
+      totalEl.innerText = total;
+
+      document.getElementById("checkoutModal").style.display = "flex";
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkoutModal").style.display = "none";
+    }
+
+    function prosesPembayaran() {
+      const name = document.getElementById("custName").value;
+      const address = document.getElementById("custAddress").value;
+      const method = document.getElementById("payMethod").value;
+
+      if (!name || !address || !method) {
+        alert("Mohon lengkapi data penerima dan metode pembayaran!");
+        return;
+      }
+
+      alert(`Pesanan atas nama ${name} berhasil diproses!\nMetode: ${method}\nBarang akan dikirim ke: ${address}`);
+
+      localStorage.removeItem("cart");
+      closeCheckout();
+      renderCart();
+      updateCartCount();
+    }
+    function addToCart(productId) {
+      let products = JSON.parse(localStorage.getItem("products")) || [];
+      let p = products.find(x => x.id == productId);
+
+      if (p && p.stock <= 0) {
+        alert("Maaf, stok barang ini sudah habis!");
+        return;
+      }
+
+      // ... lanjut ke logic simpan ke cart kamu ...
+    }
+  </script>
+
+  </div>
+  <div class="cart-sidebar" id="cartSidebar">
+
+    <span class="cart-close" onclick="toggleCart()">✕</span>
+
+    <h2>Keranjang</h2>
+
+    <div id="cartList"></div>
+
+    <h3 id="cartTotal"></h3>
+
+    <button onclick="openCheckout()">Checkout</button>
+  </div>
+  <!-- MODAL CHECKOUT -->
+  <div id="checkoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeCheckout()">&times;</span>
+      <h2>Detail Pengiriman</h2>
+
+      <div class="form-checkout">
+        <input type="text" id="custName" placeholder="Nama Lengkap" required>
+        <textarea id="custAddress" placeholder="Alamat Lengkap Penerima" required></textarea>
+
+        <select id="payMethod">
+          <option value="">Pilih Metode Pembayaran</option>
+          <option value="Transfer Bank">Transfer Bank (BCA/Mandiri)</option>
+          <option value="E-Wallet">E-Wallet (Dana/OVO)</option>
+          <option value="QRIS">QRIS</option>
+        </select>
+      </div>
+
+      <hr>
+      <div id="checkout-items"></div>
+      <h3>Total: Rp <span id="checkout-total">0</span></h3>
+
+      <button onclick="prosesPembayaran()" class="btn-pay">Bayar Sekarang</button>
+    </div>
+  </div>
+
+  <script>
+    let index = 0;
+    const slider = document.getElementById("heroSlider");
+    const total = slider.children.length;
+
+    /* update posisi */
+    function updateSlide() {
+      slider.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    /* next */
+    function nextSlide() {
+      index = (index + 1) % total;
+      updateSlide();
+      resetAuto();
+    }
+
+    /* prev */
+    function prevSlide() {
+      index = (index - 1 + total) % total;
+      updateSlide();
+      resetAuto();
+    }
+
+    /* AUTO SLIDE */
+    let auto = setInterval(nextSlide, 5000);
+
+    /* reset biar smooth */
+    function resetAuto() {
+      clearInterval(auto);
+      auto = setInterval(nextSlide, 5000);
+    }
+
+    /* pause saat hover */
+    const hero = document.querySelector(".hero");
+    hero.addEventListener("mouseenter", () => clearInterval(auto));
+    hero.addEventListener("mouseleave", resetAuto);
+  </script>
+  <script src="js/auth.js"></script>
+</body>
+</head>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Syarat & Ketentuan - CyberCrate</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js"></script>
+    <script>
+        if (!sessionStorage.getItem("user")) {
+            window.location.replace("login.html");
+        }
+    </script>
+</head>
+
+<body class="auth-page">
+
+    <nav>
+        <div class="logo">
+            <img src="images/logo.png">
+            <h2>CYBER CREATE</h2>
+        </div>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="index.html#informasi">Informasi</a>
+        </div>
+    </nav>
+
+    <main class="about-wrapper">
+        <h1 class="about-title">SYARAT & KETENTUAN</h1>
+
+        <div class="about-content">
+            <div class="about-text">
+                <div class="policy-item">
+                    <h3>1. Penggunaan Layanan</h3>
+                    <p>Dengan mengakses website CyberCrate, Anda setuju untuk mematuhi seluruh aturan penggunaan yang
+                        berlaku, termasuk sistem keamanan login kami.</p>
+                </div>
+
+                <div class="policy-item">
+                    <h3>2. Akun Pengguna</h3>
+                    <p>Setiap pengguna bertanggung jawab penuh atas kerahasiaan data akun yang tersimpan secara lokal di
+                        browser masing-masing.</p>
+                </div>
+
+                <div class="policy-item">
+                    <h3>3. Ketentuan Rakit PC</h3>
+                    <p>Semua spesifikasi komponen PC yang dipesan akan dikonfirmasi kembali melalui kontak resmi kami
+                        untuk memastikan ketersediaan stok.</p>
+                </div>
+            </div>
+
+            <div class="image-container-square">
+                <img src="images/syarat.png" alt="Terms and Conditions">
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

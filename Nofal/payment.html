@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cara Pembayaran - CyberCrate</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js"></script>
+    <script>
+        if (!sessionStorage.getItem("user")) {
+            window.location.replace("login.html");
+        }
+    </script>
+</head>
+
+<body class="auth-page">
+
+    <nav>
+        <div class="logo">
+            <img src="images/logo.png">
+            <h2>CYBER CREATE</h2>
+        </div>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="index.html#informasi">Informasi</a>
+        </div>
+    </nav>
+
+    <main class="about-wrapper">
+        <h1 class="about-title">CARA PEMBAYARAN</h1>
+
+        <div class="about-content">
+            <div class="about-text">
+                <div class="policy-item">
+                    <h3>1. Transfer Bank</h3>
+                    <p>Kami menerima pembayaran melalui transfer antar bank ke rekening resmi CyberCrate yang tertera
+                        saat checkout.</p>
+                </div>
+
+                <div class="policy-item">
+                    <h3>2. E-Wallet</h3>
+                    <p>Mendukung pembayaran melalui QRIS, Dana, OVO, dan GoPay untuk proses verifikasi yang lebih cepat.
+                    </p>
+                </div>
+
+                <div class="policy-item">
+                    <h3>3. Verifikasi Otomatis</h3>
+                    <p>Setelah pembayaran berhasil, sistem akan memperbarui status pesanan Anda secara otomatis dalam
+                        waktu 1-5 menit.</p>
+                </div>
+            </div>
+
+            <div class="image-container-square">
+                <img src="images/pembayaran.png" alt="Payment Methods">
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

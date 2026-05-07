@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tentang Kami - CyberCrate</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js"></script>
+    <script>
+        if (!sessionStorage.getItem("user")) {
+            window.location.replace("login.html");
+        }
+    </script>
+</head>
+
+<body class="auth-page">
+
+    <nav>
+        <div class="logo">
+            <img src="images/logo.png">
+            <h2>CYBER CREATE</h2>
+        </div>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="index.html#informasi">Informasi</a>
+        </div>
+    </nav>
+
+    <main class="about-wrapper">
+        <h1 class="about-title">TENTANG KAMI</h1>
+
+        <div class="about-content">
+            <!-- KOLOM KIRI: TEKS -->
+            <div class="about-text">
+                <p>CyberCrate adalah destinasi utama bagi para antusias teknologi yang mencari rakitan PC performa
+                    tinggi dengan sentuhan estetika futuristik.</p>
+                <p>Bermarkas di Bogor, kami melayani perakitan kustom untuk berbagai kebutuhan profesional, mulai dari
+                    gaming hingga workstation.</p>
+
+                <div class="address-box">
+                    <h3>Lokasi Workshop:</h3>
+                    <p><strong>Universitas Djuanda</strong><br>
+                        Jl. Tol Ciawi No.1, Ciawi, Kec. Ciawi, Kabupaten Bogor, Jawa Barat 16720.</p>
+                </div>
+            </div>
+
+            <!-- KOLOM KANAN: PETA -->
+            <div class="about-map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d990.761352467144!2d106.8491873284954!3d-6.654628799709235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c95387c8d3eb%3A0x941f12ea770a2c9e!2sUniversitas%20Djuanda!5e0!3m2!1sid!2sid!4v1715000000000!5m2!1sid!2sid"
+                    allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </main>
+
+
+</body>
+
+</html>
